@@ -7,9 +7,12 @@ admin.site.register(BannerImage)
 
 
 class BlogPostAdmin(admin.ModelAdmin):
-    list_display = ('title', 'active', 'deleted')  # Fields to display in list view
-    list_filter = ('active', 'deleted')             # Fields to filter by
-    search_fields = ('title',)           # Fields to search in
-    ordering = ('-create_date',)                        # Default ordering
+    list_display = ('title', 'active', 'deleted')
+    list_filter = ('active', 'deleted')
+    search_fields = ('title',)
+    ordering = ('-create_date',)
+    list_per_page = 1
+    date_hierarchy = 'create_date'
+
 
 admin.site.register(BlogPost, BlogPostAdmin)

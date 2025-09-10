@@ -38,6 +38,7 @@ class BlogPost(models.Model):
     document = models.FileField(upload_to='blog_document/', null=True, blank=True)
     authors = models.ManyToManyField('blog_app.Author', related_name='blog_posts', blank=True)
     deleted = models.BooleanField(verbose_name="წაშლილია", default=False)
+    create_date_date = models.DateTimeField(verbose_name='შექმნის თარიღი', auto_now_add=True)
 
     class Meta:
         verbose_name = "Blog Post"
