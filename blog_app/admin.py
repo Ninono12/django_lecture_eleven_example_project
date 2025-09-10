@@ -11,8 +11,12 @@ class BlogPostAdmin(admin.ModelAdmin):
     list_filter = ('active', 'deleted')
     search_fields = ('title',)
     ordering = ('-create_date',)
-    list_per_page = 1
+    #list_per_page = 1
     date_hierarchy = 'create_date'
+    #fields = ('title', 'active', 'deleted')
+    #exclude = ['title',]
+    #filter_vertical = ('authors',)
+    filter_horizontal = ('authors',)
 
 
 admin.site.register(BlogPost, BlogPostAdmin)
