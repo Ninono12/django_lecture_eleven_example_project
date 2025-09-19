@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.db import models
 from django.utils.timezone import now
 
@@ -40,8 +42,46 @@ class BlogPostImage(models.Model):
     order = models.PositiveIntegerField(default=0)
 
     class Meta:
+        verbose_name = "Blog post image"
+        verbose_name_plural = "Blog post images"
         ordering = ['order']
 
+    def __str__(self):
+        return f'{self.blog_post.title} - {self.id} image'
+
+class BlogPostImageDescription(models.Model):
+    blog_post_image = models.ForeignKey(
+        BlogPostImage,
+        on_delete=models.CASCADE,
+        related_name='descriptions',
+        verbose_name='Blog post image'
+    )
+    text = models.TextField(verbose_name='Text')
+
+    class Meta:
+        verbose_name = "Blog post image Description"
+        verbose_name_plural = "Blog post images Descriptions"
+
+    def __str__(self):
+        return f'{self.blog_post_image.blog_post.title} - {self.id} image'
+
+
+# ------------------ BannerImage Model ------------------
 class BannerImage(models.Model):
-    blog_post = models.ForeignKey(BlogPost, on_delete=models.CASCADE, related_name='banners')
-    image = models.ImageField(upload_to="banner_images/", default='banner_images/default.jpg')
+    blog_post = models.ForeignKey(
+        BlogPost,
+        on_delete=models.CASCADE,
+        related_name="banners",
+        verbose_name="Blog post"
+    )
+    image = models.ImageField(upload_to="banner_images/", verbose_name="ბანერის სურათი")
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        verbose_name = "Banner image"
+        verbose_name_plural = "Banner images"
+        ordering = ['order']
+
+    def __str__(self):
+        return f'{self.blog_post.title} - Banner {self.id}'
+

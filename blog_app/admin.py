@@ -1,34 +1,33 @@
 from django.contrib import admin
-from blog_app.models import BlogPost, BlogPostImage, Author, BannerImage
-from adminsortable2.admin import SortableAdminMixin, SortableInlineAdminMixin
-
+from blog_app.models import BlogPost, BlogPostImage, Author, BannerImage, BlogPostImageDescription
+from nested_admin import NestedTabularInline, NestedModelAdmin
 
 @admin.register(BannerImage)
 class BannerImageAdmin(admin.ModelAdmin):
     raw_id_fields = ('blog_post',)
 
-
-#@admin.register(Author)
-#class AuthorAdmin(admin.ModelAdmin):
-    #list_display = ('full_name', 'age')
-
 class MembershipInline(admin.StackedInline):
-    model = BlogPostImage.authors.through
+    model = BlogPost.authors.through
+
+class BlogPostImageDescriptionInline(NestedTabularInline):
+    model = BlogPostImageDescription
+    fk_name = 'blog_post_image'
     extra = 1
 
-class BlogPostImageInline(SortableInlineAdminMixin, admin.StackedInline):
+class BlogPostImageInline(NestedTabularInline):
     model = BlogPostImage
+    inlines = [BlogPostImageDescriptionInline]
     extra = 4
     ordering = ['order']
 
-
 @admin.register(BlogPost)
-class BlogPostAdmin(SortableAdminMixin, admin.ModelAdmin):
-    inlines = [BlogPostImageInline]
-    list_display = ('title', 'active', 'deleted', 'order')  # reorder გამოჩნდება აქ
-    ordering = ('order',)  # ასევე დაჯგუფება list view-ში
+class BlogPostAdmin(NestedModelAdmin):
+    inlines = [BlogPostImageInline]  # MembershipInline ამოღებული
+    list_display = ('title', 'active', 'deleted', 'order')
+    ordering = ('order',)
     list_filter = ('active', 'deleted')
     search_fields = ('title',)
+    filter_horizontal = ('authors',)
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

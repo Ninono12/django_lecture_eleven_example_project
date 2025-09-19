@@ -38,9 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'adminsortable2',
-
-
+    #'adminsortable2',
+    'nested_admin',
     'blog_app'
 ]
 
