@@ -19,15 +19,28 @@ class Author(models.Model):
         return None
 
 class BlogPost(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField(verbose_name="სათაური", max_length=255)
+    text = models.TextField(verbose_name="ტექსტი", null=True, blank=True)
     authors = models.ManyToManyField(Author)
-    active = models.BooleanField(default=True)
-    deleted = models.BooleanField(default=False)
-    create_date = models.DateTimeField(default=now)
+    active = models.BooleanField(default=True, verbose_name="აქტიურია")
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(verbose_name="განახლების თარიღი", auto_now=True, null=True)
+    website = models.URLField(verbose_name='ვებ მისამართი', null=True)
+    document = models.FileField(upload_to='blog_document/', null=True, blank=True)
+    deleted = models.BooleanField(verbose_name='წაშლილია', default=False)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
 
 class BlogPostImage(models.Model):
+    authors = models.ManyToManyField("Author", related_name="images")
     blog_post = models.ForeignKey(BlogPost, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to="blog_images/")
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
 
 class BannerImage(models.Model):
     blog_post = models.ForeignKey(BlogPost, on_delete=models.CASCADE, related_name='banners')
