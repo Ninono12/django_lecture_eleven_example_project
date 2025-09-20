@@ -50,8 +50,8 @@ class BlogPostImage(models.Model):
         return f'{self.blog_post.title} - {self.id} image'
 
 class BlogPostImageDescription(models.Model):
-    blog_post_image = models.ForeignKey(
-        BlogPostImage,
+    blog_post = models.ForeignKey(
+        to='blog_app.BlogPostImage',
         on_delete=models.CASCADE,
         related_name='descriptions',
         verbose_name='Blog post image'
@@ -63,9 +63,11 @@ class BlogPostImageDescription(models.Model):
         verbose_name_plural = "Blog post images Descriptions"
 
     def __str__(self):
-        return f'{self.blog_post_image.blog_post.title} - {self.id} image'
+        return f'{self.blog_post.blog_post.title} - {self.id} image'
+
 
 # ------------------ BannerImage Model ------------------
+
 class BannerImage(models.Model):
     blog_post = models.ForeignKey(
         BlogPost,
